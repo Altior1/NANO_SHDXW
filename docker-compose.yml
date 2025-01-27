@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: ${POSTGRES_USR}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWD}
+      POSTGRES_DB: nano_shdxw_dev
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  web:
+    build:
+      context: .
+    ports:
+      - "4000:4000"
+    environment:
+      DATABASE_URL: ecto://$POSTGRES_USR:$POSTGRES_PASSWD@db:5432/$POSTGRES_DBNAME
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+    command: [ "mix", "phx.server" ]
+
+volumes:
+  postgres_data:
