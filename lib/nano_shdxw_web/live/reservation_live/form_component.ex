@@ -21,6 +21,7 @@ defmodule NanoShdxwWeb.ReservationLive.FormComponent do
       >
         <.input field={@form[:starting_date]} type="datetime-local" label="Starting date" />
         <.input field={@form[:ending_date]} type="datetime-local" label="Ending date" />
+        <.input field={@form[:user_id]} type="hidden" value={@current_user.id} />
         <:actions>
           <.button phx-disable-with="Saving...">Save Reservation</.button>
         </:actions>
@@ -30,14 +31,16 @@ defmodule NanoShdxwWeb.ReservationLive.FormComponent do
   end
 
   @impl true
-  def update(%{reservation: reservation} = assigns, socket) do
-    {:ok,
-     socket
-     |> assign(assigns)
-     |> assign_new(:form, fn ->
-       to_form(RoomReservation.change_reservation(reservation))
-     end)}
-  end
+def update(assigns, socket) do
+  socket =
+  socket
+  |> assign(assigns)
+  |> assign_new(:form, fn ->
+    to_form(RoomReservation.change_reservation(assigns.reservation))
+  end)
+
+  {:ok, socket}
+end
 
   @impl true
   def handle_event("validate", %{"reservation" => reservation_params}, socket) do
@@ -72,7 +75,7 @@ defmodule NanoShdxwWeb.ReservationLive.FormComponent do
         {:noreply,
          socket
          |> put_flash(:info, "Reservation created successfully")
-         |> push_patch(to: socket.assigns.patch)}
+         |> redirect(to: "/reservations_calendar")}
 
       {:error, %Ecto.Changeset{} = changeset} ->
         {:noreply, assign(socket, form: to_form(changeset))}

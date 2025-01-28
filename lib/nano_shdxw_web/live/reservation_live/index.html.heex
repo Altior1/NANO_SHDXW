@@ -30,9 +30,15 @@
   </:action>
 </.table>
 
-<.modal :if={@live_action in [:new, :edit]} id="reservation-modal" show on_cancel={JS.patch(~p"/reservations")}>
+<.modal
+  :if={@live_action in [:new, :edit]}
+  id="reservation-modal"
+  show
+  on_cancel={JS.patch(~p"/reservations")}
+>
   <.live_component
     module={NanoShdxwWeb.ReservationLive.FormComponent}
+    current_user={@current_user}
     id={@reservation.id || :new}
     title={@page_title}
     action={@live_action}

@@ -1,29 +1,27 @@
 defmodule NanoShdxwWeb.ReservationApiController do
   use NanoShdxwWeb, :controller
-
   alias NanoShdxw.RoomReservation
+  alias NanoShdxw.Repo
 
-  def week(conn, %{"start_date" => start_date}) do
-    case Timex.parse(start_date, "{YYYY}-{0M}-{0D}") do
-      {:ok, parsed_date} ->
-        reservations = RoomReservation.list_reservations_for_week(parsed_date)
+  @spec events(Plug.Conn.t(), any()) :: Plug.Conn.t()
+  def events(conn, _params) do
+    # Récupération des réservations dans la base de données
+    reservations = RoomReservation.list_reservations()
+    |> Repo.preload(:user)
 
-        # Convert reservations to FullCalendar event format
-        events = Enum.map(reservations, fn reservation ->
-          %{
-            id: reservation.id,
-            title: reservation.title,
-            start: reservation.starting_date,
-            end: reservation.ending_date
-          }
-        end)
+    # Transformer les réservations en un format compatible avec FullCalendar
+    events =
+      Enum.map(reservations, fn reservation ->
+        %{
+          id: reservation.id,
+          start: DateTime.to_iso8601(reservation.starting_date),
+          end: DateTime.to_iso8601(reservation.ending_date),
+          user_id: reservation.user_id,
+          user_email: reservation.user.email
+        }
+      end)
 
-        json(conn, events)
-
-      {:error, _reason} ->
-        conn
-        |> put_status(:bad_request)
-        |> json(%{error: "Invalid date format"})
-    end
+    # Retourner les données JSON
+    json(conn, events)
   end
 end

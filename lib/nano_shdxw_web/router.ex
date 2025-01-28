@@ -76,8 +76,16 @@ defmodule NanoShdxwWeb.Router do
       live "/reservations/:id", ReservationLive.Show, :show
       live "/reservations/:id/show/edit", ReservationLive.Show, :edit
 
-      live "/reservations_calendar", ReservationCalendar
-      get "/reservations_calendar/week", ReservationApiController, :week
+      live "/reservations_calendar", ReservationCalendarLive
+      get "/reservations_calendar/events", ReservationApiController, :events
+
+      # Messagge routes
+      live "/messages", MessageLive.Index, :index
+      live "/messages/new", MessageLive.Index, :new
+      live "/messages/:id/edit", MessageLive.Index, :edit
+
+      live "/messages/:id", MessageLive.Show, :show
+      live "/messages/:id/show/edit", MessageLive.Show, :edit
 
       # User routes
       live "/users/settings", UserSettingsLive, :edit

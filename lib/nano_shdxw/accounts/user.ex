@@ -9,6 +9,8 @@ defmodule NanoShdxw.Accounts.User do
     field :current_password, :string, virtual: true, redact: true
     field :confirmed_at, :utc_datetime
 
+    has_many :reservations, NanoShdxw.RoomReservation.Reservation
+
     timestamps(type: :utc_datetime)
   end
 

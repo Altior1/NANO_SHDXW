@@ -3,13 +3,21 @@ defmodule NanoShdxwWeb.ReservationLive.Index do
 
   alias NanoShdxw.RoomReservation
   alias NanoShdxw.RoomReservation.Reservation
+  alias NanoShdxw.Accounts
 
   @impl true
-  def mount(_params, _session, socket) do
-    {:ok, stream(socket, :reservations, RoomReservation.list_reservations())}
+  def mount(_params, session, socket) do
+    current_user = Accounts.get_user_by_session_token(session["user_token"])
+    {:ok,
+      socket
+      |> assign(:current_user, current_user)
+      |> stream(:reservations, RoomReservation.list_reservations())
+      |> IO.inspect(label: "toto")
+    }
   end
 
   @impl true
+  @spec handle_params(any(), any(), map()) :: {:noreply, map()}
   def handle_params(params, _url, socket) do
     {:noreply, apply_action(socket, socket.assigns.live_action, params)}
   end
@@ -18,15 +26,19 @@ defmodule NanoShdxwWeb.ReservationLive.Index do
     socket
     |> assign(:page_title, "Edit Reservation")
     |> assign(:reservation, RoomReservation.get_reservation!(id))
+    |> assign(:current_user, socket.assigns.current_user)
   end
 
   defp apply_action(socket, :new, _params) do
+    IO.inspect(socket.assigns.current_user, label: "Current user in :new")
     socket
     |> assign(:page_title, "New Reservation")
     |> assign(:reservation, %Reservation{})
+    |> assign(:current_user, socket.assigns.current_user)
   end
 
   defp apply_action(socket, :index, _params) do
+    IO.inspect(socket.assigns.current_user, label: "Current user in :index")
     socket
     |> assign(:page_title, "Listing Reservations")
     |> assign(:reservation, nil)

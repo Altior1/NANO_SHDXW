@@ -22,18 +22,12 @@ defmodule NanoShdxw.RoomReservation do
   end
 
   def list_reservations_for_week(start_date) do
-    start_date = if is_binary(start_date), do: Timex.parse!(start_date, "{YYYY}-{0M}-{0D}"), else: start_date
     end_date = Timex.shift(start_date, days: 7)
 
     Repo.all(
-    from r in Reservation,
-    where: r.starting_date >= ^start_date and r.starting_date < ^end_date,
-    select: %{
-      id: r.id,
-      start: r.starting_date,
-      end: r.ending_date
-    }
-  )
+      from r in Reservation,
+      where: r.starting_date >= ^start_date and r.starting_date < ^end_date
+    )
   end
 
   @doc """

@@ -1,4 +1,4 @@
-defmodule NanoShdxwWeb.ReservationCalendar do
+defmodule NanoShdxwWeb.ReservationCalendarLive do
   use NanoShdxwWeb, :live_view
 
   alias NanoShdxw.RoomReservation
@@ -11,33 +11,20 @@ defmodule NanoShdxwWeb.ReservationCalendar do
 
   def render(assigns) do
     ~H"""
-    <div id="calendar"></div>
-
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-      var calendarEl = document.getElementById('calendar');
-
-      var calendar = new FullCalendar.Calendar(calendarEl, {
-      initialView: 'timeGridWeek',
-      events: function(fetchInfo, successCallback, failureCallback) {
-        fetch(`/reservations_calendar/week?start_date=${fetchInfo.startStr}`)
-          .then(response => {
-            if (!response.ok) {
-              throw new Error('Failed to fetch events');
-            }
-            return response.json();
-          })
-          .then(data => successCallback(data))
-          .catch(error => {
-            console.error('Error fetching events:', error);
-            failureCallback(error);
-          });
-      }
-      });
-
-      calendar.render();
-      });
-    </script>
+    <div>
+      <h1 class="text-xl font-bold mb-4">Calendrier des Réservations</h1>
+      <div>
+        <.button id="zoom_day">Jour</.button>
+        <.button id="zoom_week">Semaine</.button>
+      </div>
+      <div id="calendar" phx-hook="CalendarHook"></div>
+      <br/>
+      <.button phx-click="new">New Reservation</.button>
+    </div>
     """
+  end
+
+  def handle_event("new", _params, socket) do
+    {:noreply, push_navigate(socket, to: "/reservations/new")}
   end
 end
