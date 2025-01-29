@@ -17,4 +17,18 @@ defmodule NanoShdxw.MessagingFixtures do
 
     message
   end
+
+  @doc """
+  Generate a start_conversation.
+  """
+  def start_conversation_fixture(attrs \\ %{}) do
+    {:ok, start_conversation} =
+      attrs
+      |> Enum.into(%{
+
+      })
+      |> NanoShdxw.Messaging.create_start_conversation()
+
+    start_conversation
+  end
 end

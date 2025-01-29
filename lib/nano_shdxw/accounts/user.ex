@@ -10,6 +10,8 @@ defmodule NanoShdxw.Accounts.User do
     field :confirmed_at, :utc_datetime
 
     has_many :reservations, NanoShdxw.RoomReservation.Reservation
+    has_many :sent_messages, NanoShdxw.Messaging.Message, foreign_key: :sender_id
+    has_many :received_messages, NanoShdxw.Messaging.Message, foreign_key: :receiver_id
 
     timestamps(type: :utc_datetime)
   end

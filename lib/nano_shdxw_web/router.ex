@@ -87,6 +87,16 @@ defmodule NanoShdxwWeb.Router do
       live "/messages/:id", MessageLive.Show, :show
       live "/messages/:id/show/edit", MessageLive.Show, :edit
 
+      # start chat
+      live "/start_conversations", StartConversationLive.Index, :index
+      live "/start_conversations/new", StartConversationLive.Index, :new
+      live "/start_conversations/:id/edit", StartConversationLive.Index, :edit
+
+      live "/start_conversations/:id", StartConversationLive.Show, :show
+      live "/start_conversations/:id/show/edit", StartConversationLive.Show, :edit
+
+      live "/start-conversation", StartConversationLive, :index
+      live "/conversation/:sender_id/:receiver_id", ConversationLive, :show
       # User routes
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email

@@ -12,7 +12,6 @@ defmodule NanoShdxwWeb.ReservationLive.Index do
       socket
       |> assign(:current_user, current_user)
       |> stream(:reservations, RoomReservation.list_reservations())
-      |> IO.inspect(label: "toto")
     }
   end
 

@@ -4,8 +4,8 @@ defmodule NanoShdxw.Messaging.Message do
 
   schema "messages" do
     field :content, :string
-    field :sender_id, :id
-    field :receiver_id, :id
+    belongs_to :sender, NanoShdxw.Accounts.User
+    belongs_to :receiver, NanoShdxw.Accounts.User
 
     timestamps(type: :utc_datetime)
   end
@@ -13,7 +13,7 @@ defmodule NanoShdxw.Messaging.Message do
   @doc false
   def changeset(message, attrs) do
     message
-    |> cast(attrs, [:content])
-    |> validate_required([:content])
+    |> cast(attrs, [:content, :sender_id, :receiver_id])
+    |> validate_required([:content, :sender_id, :receiver_id])
   end
 end
