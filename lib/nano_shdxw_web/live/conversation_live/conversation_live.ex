@@ -67,15 +67,6 @@ defmodule NanoShdxwWeb.ConversationLive do
       />
       <button type="submit">Send</button>
     </form>
-
-    <%!-- <.simple_form
-      for={@form}
-      id="messaging-form"
-      phx-target={@myself}
-      phx-submit="send_message"
-    >
-    <.input field={@form[:content]} type="text" label="Message" required />
-    </.simple_form> --%>
     """
   end
 end

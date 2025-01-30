@@ -4,6 +4,9 @@ defmodule NanoShdxw.Messaging.Message do
 
   schema "messages" do
     field :content, :string
+    field :title, :string
+    field :message_date, :utc_datetime, default: DateTime.utc_now()
+    field :link, :string
     belongs_to :sender, NanoShdxw.Accounts.User
     belongs_to :receiver, NanoShdxw.Accounts.User
 
@@ -15,5 +18,7 @@ defmodule NanoShdxw.Messaging.Message do
     message
     |> cast(attrs, [:content, :sender_id, :receiver_id])
     |> validate_required([:content, :sender_id, :receiver_id])
+    |> put_change(:message_date, DateTime.utc_now())
+    |> unique_constraint(:link)
   end
 end

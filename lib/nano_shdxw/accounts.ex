@@ -128,6 +128,16 @@ defmodule NanoShdxw.Accounts do
     |> Ecto.Changeset.apply_action(:update)
   end
 
+  # List all users
+  def list_users do
+    Repo.all(User)
+  end
+
+  # Get user by id
+  def get_user_by_id(id) do
+    Repo.get(User, id)
+  end
+
   @doc """
   Updates the user email using the given token.
 
