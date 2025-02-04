@@ -36,14 +36,19 @@ defmodule NanoShdxw.RoomReservationTest do
       reservation = reservation_fixture()
       update_attrs = %{starting_date: ~D[2025-01-24], ending_date: ~D[2025-01-24]}
 
-      assert {:ok, %Reservation{} = reservation} = RoomReservation.update_reservation(reservation, update_attrs)
+      assert {:ok, %Reservation{} = reservation} =
+               RoomReservation.update_reservation(reservation, update_attrs)
+
       assert reservation.starting_date == ~D[2025-01-24]
       assert reservation.ending_date == ~D[2025-01-24]
     end
 
     test "update_reservation/2 with invalid data returns error changeset" do
       reservation = reservation_fixture()
-      assert {:error, %Ecto.Changeset{}} = RoomReservation.update_reservation(reservation, @invalid_attrs)
+
+      assert {:error, %Ecto.Changeset{}} =
+               RoomReservation.update_reservation(reservation, @invalid_attrs)
+
       assert reservation == RoomReservation.get_reservation!(reservation.id)
     end
 

@@ -9,9 +9,18 @@ defmodule NanoShdxwWeb.ChatChannel do
   def handle_in("new_message", %{"receiver_id" => receiver_id, "content" => content}, socket) do
     sender_id = socket.assigns.user_id
 
-    case Messaging.create_message(%{sender_id: sender_id, receiver_id: receiver_id, content: content}) do
+    case Messaging.create_message(%{
+           sender_id: sender_id,
+           receiver_id: receiver_id,
+           content: content
+         }) do
       {:ok, _messages} ->
-        broadcast!(socket, "new_message", %{sender_id: sender_id, receiver_id: receiver_id, content: content})
+        broadcast!(socket, "new_message", %{
+          sender_id: sender_id,
+          receiver_id: receiver_id,
+          content: content
+        })
+
         {:noreply, socket}
 
       {:error, _changeset} ->

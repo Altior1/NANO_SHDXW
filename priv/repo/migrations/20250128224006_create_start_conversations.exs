@@ -3,7 +3,6 @@ defmodule NanoShdxw.Repo.Migrations.CreateStartConversations do
 
   def change do
     create table(:start_conversations) do
-
       timestamps(type: :utc_datetime)
     end
   end

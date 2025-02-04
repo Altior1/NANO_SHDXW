@@ -26,7 +26,7 @@ defmodule NanoShdxw.RoomReservation do
 
     Repo.all(
       from r in Reservation,
-      where: r.starting_date >= ^start_date and r.starting_date < ^end_date
+        where: r.starting_date >= ^start_date and r.starting_date < ^end_date
     )
   end
 

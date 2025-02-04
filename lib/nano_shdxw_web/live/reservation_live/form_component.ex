@@ -31,16 +31,16 @@ defmodule NanoShdxwWeb.ReservationLive.FormComponent do
   end
 
   @impl true
-def update(assigns, socket) do
-  socket =
-  socket
-  |> assign(assigns)
-  |> assign_new(:form, fn ->
-    to_form(RoomReservation.change_reservation(assigns.reservation))
-  end)
+  def update(assigns, socket) do
+    socket =
+      socket
+      |> assign(assigns)
+      |> assign_new(:form, fn ->
+        to_form(RoomReservation.change_reservation(assigns.reservation))
+      end)
 
-  {:ok, socket}
-end
+    {:ok, socket}
+  end
 
   @impl true
   def handle_event("validate", %{"reservation" => reservation_params}, socket) do

@@ -44,10 +44,15 @@ defmodule NanoShdxwWeb.StartConversationLiveTest do
       assert html =~ "Start conversation created successfully"
     end
 
-    test "updates start_conversation in listing", %{conn: conn, start_conversation: start_conversation} do
+    test "updates start_conversation in listing", %{
+      conn: conn,
+      start_conversation: start_conversation
+    } do
       {:ok, index_live, _html} = live(conn, ~p"/start_conversations")
 
-      assert index_live |> element("#start_conversations-#{start_conversation.id} a", "Edit") |> render_click() =~
+      assert index_live
+             |> element("#start_conversations-#{start_conversation.id} a", "Edit")
+             |> render_click() =~
                "Edit Start conversation"
 
       assert_patch(index_live, ~p"/start_conversations/#{start_conversation}/edit")
@@ -66,10 +71,16 @@ defmodule NanoShdxwWeb.StartConversationLiveTest do
       assert html =~ "Start conversation updated successfully"
     end
 
-    test "deletes start_conversation in listing", %{conn: conn, start_conversation: start_conversation} do
+    test "deletes start_conversation in listing", %{
+      conn: conn,
+      start_conversation: start_conversation
+    } do
       {:ok, index_live, _html} = live(conn, ~p"/start_conversations")
 
-      assert index_live |> element("#start_conversations-#{start_conversation.id} a", "Delete") |> render_click()
+      assert index_live
+             |> element("#start_conversations-#{start_conversation.id} a", "Delete")
+             |> render_click()
+
       refute has_element?(index_live, "#start_conversations-#{start_conversation.id}")
     end
   end
@@ -83,7 +94,10 @@ defmodule NanoShdxwWeb.StartConversationLiveTest do
       assert html =~ "Show Start conversation"
     end
 
-    test "updates start_conversation within modal", %{conn: conn, start_conversation: start_conversation} do
+    test "updates start_conversation within modal", %{
+      conn: conn,
+      start_conversation: start_conversation
+    } do
       {:ok, show_live, _html} = live(conn, ~p"/start_conversations/#{start_conversation}")
 
       assert show_live |> element("a", "Edit") |> render_click() =~

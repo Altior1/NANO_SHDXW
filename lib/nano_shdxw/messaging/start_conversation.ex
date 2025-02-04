@@ -3,8 +3,6 @@ defmodule NanoShdxw.Messaging.StartConversation do
   import Ecto.Changeset
 
   schema "start_conversations" do
-
-
     timestamps(type: :utc_datetime)
   end
 

@@ -133,9 +133,26 @@ defmodule NanoShdxw.Accounts do
     Repo.all(User)
   end
 
+  def list_users(user_list) do
+    User
+    |> where([u], u.id in ^user_list)
+    |> Repo.all()
+  end
+
+  def list_user_with_preload() do
+    User
+    |> Repo.all()
+    |> Repo.preload([:sent_messages, sent_messages: :receiver])
+  end
+
   # Get user by id
   def get_user_by_id(id) do
     Repo.get(User, id)
+  end
+
+  # Get users by id
+  def get_users(user_ids) do
+    Repo.all(from u in User, where: u.id in ^user_ids)
   end
 
   @doc """

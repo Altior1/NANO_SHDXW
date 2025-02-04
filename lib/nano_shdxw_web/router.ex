@@ -56,7 +56,6 @@ defmodule NanoShdxwWeb.Router do
       live "/users/log_in", UserLoginLive, :new
       live "/users/reset_password", UserForgotPasswordLive, :new
       live "/users/reset_password/:token", UserResetPasswordLive, :edit
-
     end
 
     post "/users/log_in", UserSessionController, :create
@@ -67,7 +66,6 @@ defmodule NanoShdxwWeb.Router do
 
     live_session :require_authenticated_user,
       on_mount: [{NanoShdxwWeb.UserAuth, :ensure_authenticated}] do
-
       # Reservation routes
       live "/reservations", ReservationLive.Index, :index
       live "/reservations/new", ReservationLive.Index, :new
@@ -87,6 +85,13 @@ defmodule NanoShdxwWeb.Router do
       live "/messages/:id", MessageLive.Show, :show
       live "/messages/:id/show/edit", MessageLive.Show, :edit
 
+      live "/topic", TopicLive.Index, :index
+      live "/topic/new", TopicLive.Index, :new
+      live "/topic/:id/edit", TopicLive.Index, :edit
+
+      live "/topic/:id", TopicLive.Show, :show
+      live "/topic/:id/show/edit", TopicLive.Show, :edit
+
       # start chat
       live "/start_conversations", StartConversationLive.Index, :index
       live "/start_conversations/new", StartConversationLive.Index, :new
@@ -96,7 +101,7 @@ defmodule NanoShdxwWeb.Router do
       live "/start_conversations/:id/show/edit", StartConversationLive.Show, :edit
 
       live "/start-conversation", StartConversationLive, :index
-      live "/conversation/:sender_id/:receiver_id", ConversationLive, :show
+      live "/conversation/:link", ConversationLive
       # User routes
       live "/users/settings", UserSettingsLive, :edit
       live "/users/settings/confirm_email/:token", UserSettingsLive, :confirm_email

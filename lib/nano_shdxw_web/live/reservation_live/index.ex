@@ -8,11 +8,11 @@ defmodule NanoShdxwWeb.ReservationLive.Index do
   @impl true
   def mount(_params, session, socket) do
     current_user = Accounts.get_user_by_session_token(session["user_token"])
+
     {:ok,
-      socket
-      |> assign(:current_user, current_user)
-      |> stream(:reservations, RoomReservation.list_reservations())
-    }
+     socket
+     |> assign(:current_user, current_user)
+     |> stream(:reservations, RoomReservation.list_reservations())}
   end
 
   @impl true
@@ -30,6 +30,7 @@ defmodule NanoShdxwWeb.ReservationLive.Index do
 
   defp apply_action(socket, :new, _params) do
     IO.inspect(socket.assigns.current_user, label: "Current user in :new")
+
     socket
     |> assign(:page_title, "New Reservation")
     |> assign(:reservation, %Reservation{})
@@ -38,6 +39,7 @@ defmodule NanoShdxwWeb.ReservationLive.Index do
 
   defp apply_action(socket, :index, _params) do
     IO.inspect(socket.assigns.current_user, label: "Current user in :index")
+
     socket
     |> assign(:page_title, "Listing Reservations")
     |> assign(:reservation, nil)

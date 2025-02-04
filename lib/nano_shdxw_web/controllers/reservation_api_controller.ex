@@ -6,8 +6,9 @@ defmodule NanoShdxwWeb.ReservationApiController do
   @spec events(Plug.Conn.t(), any()) :: Plug.Conn.t()
   def events(conn, _params) do
     # Récupération des réservations dans la base de données
-    reservations = RoomReservation.list_reservations()
-    |> Repo.preload(:user)
+    reservations =
+      RoomReservation.list_reservations()
+      |> Repo.preload(:user)
 
     # Transformer les réservations en un format compatible avec FullCalendar
     events =
