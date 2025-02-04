@@ -4,11 +4,10 @@ defmodule NanoShdxw.Messaging.Topic do
 
   schema "topics" do
     field :link, :string
-    field :id_message, :integer
     # field :id_user, :integer
     field :titre, :string
 
-    has_many :messages, NanoShdxw.Messaging.Message, references: :id
+    has_many :messages, NanoShdxw.Messaging.Message
     many_to_many :users, NanoShdxw.Accounts.User, join_through: "users_topics"
 
     timestamps(type: :utc_datetime)

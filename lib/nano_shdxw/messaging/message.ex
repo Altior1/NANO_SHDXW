@@ -7,9 +7,10 @@ defmodule NanoShdxw.Messaging.Message do
     field :title, :string
     field :message_date, :utc_datetime
     field :link, :string
+
     belongs_to :sender, NanoShdxw.Accounts.User
     belongs_to :receiver, NanoShdxw.Accounts.User
-    belongs_to :topic, NanoShdxw.Messaging.Topic
+    belongs_to :topic, NanoShdxw.Messaging.Topic, foreign_key: :topic_id, references: :topics
 
     timestamps(type: :utc_datetime)
   end
@@ -17,7 +18,7 @@ defmodule NanoShdxw.Messaging.Message do
   @doc false
   def changeset(message, attrs) do
     message
-    |> cast(attrs, [:content, :sender_id, :receiver_id, :link, :message_date])
+    |> cast(attrs, [:content, :sender_id, :receiver_id, :link, :message_date, :topic_id])
     |> validate_required([:sender_id, :receiver_id])
     |> put_message_date()
     |> put_link()

@@ -6,7 +6,7 @@ defmodule NanoShdxwWeb.ConversationLive do
   @impl true
   def mount(%{"link" => link}, _session, socket) do
     topic = Messaging.get_topic_by_link!(link)
-    messages = Messaging.get_messages_by_topic_id(topic.id)
+    messages = Messaging.get_messages_by_topic_id(topic.id) |> IO.inspect(label: "messages")
 
     # Récupérez les utilisateurs associés au Topic
     users = Messaging.get_users_by_topic_id(topic.id)
@@ -46,6 +46,7 @@ defmodule NanoShdxwWeb.ConversationLive do
     receiver_id = socket.assigns.receiver.id
     link = socket.assigns.link
     topic_id = socket.assigns.topic.id
+    topic_id |> IO.inspect(label: "topiiiiic")
 
     case Messaging.create_message(%{
            sender_id: sender_id,

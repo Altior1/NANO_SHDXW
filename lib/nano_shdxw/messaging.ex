@@ -293,6 +293,7 @@ defmodule NanoShdxw.Messaging do
   end
 
   def get_messages_by_topic_id(topic_id) do
+    topic_id |>IO.inspect(label: "lala")
     Repo.all(from m in Message, where: m.topic_id == ^topic_id, order_by: [asc: m.inserted_at])
   end
 
