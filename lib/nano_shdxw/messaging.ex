@@ -7,6 +7,7 @@ defmodule NanoShdxw.Messaging do
   alias NanoShdxw.Repo
 
   alias NanoShdxw.Messaging.Message
+  alias NanoShdxw.Accounts
   alias NanoShdxw.Accounts.User
 
   @doc """
@@ -112,6 +113,17 @@ defmodule NanoShdxw.Messaging do
         order_by: [asc: m.inserted_at]
 
     Repo.all(query)
+  end
+
+  def get_last_message_by_topic_id(topic_id) do
+    query =
+      from m in Message,
+        where: m.topic_id == ^topic_id,
+        order_by: [desc: m.inserted_at],
+        limit: 1,
+        select: %{content: m.content, inserted_at: m.inserted_at, sender_id: m.sender_id, receiver_id: m.receiver_id}
+
+    Repo.one(query)
   end
 
   @doc """
@@ -375,7 +387,7 @@ defmodule NanoShdxw.Messaging do
     Topic.changeset(%Topic{}, topic)
     |> IO.inspect(label: "changeset 1 ")
     # |> Ecto.Changeset.put_assoc(:users, [Accounts.get_user_by_id(user_id)])
-    |> Ecto.Changeset.put_assoc(:users, Accounts.list_users(user_ids))
+    |> Ecto.Changeset.put_assoc(:users, NanoShdxw.Accounts.list_users(user_ids))
     |> IO.inspect(label: "changeset 2")
     |> Repo.insert!()
     # |> Ecto.Changeset.put_assoc(:topics, topic)
@@ -389,6 +401,16 @@ defmodule NanoShdxw.Messaging do
     #     |> Repo.insert!()
     #   end
     # end)
+  end
+
+  def list_topics_for_current_user(user_id) do
+    Repo.all(
+      from t in Topic,
+        join: ut in "users_topics",
+        on: ut.topic_id == t.id,
+        where: ut.user_id == ^user_id,
+        select: t
+    )
   end
 
   def get_users_by_topic_id(topic_id) do

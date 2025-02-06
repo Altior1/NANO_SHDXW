@@ -4,21 +4,22 @@ defmodule NanoShdxwWeb.StartConversationLive do
   alias NanoShdxw.Messaging
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, _session, %{assigns: %{current_user: current_user}} = socket) do
     # Récupère tous les utilisateurs avec les messages préchargés
     users = Accounts.list_users()
     # last_message = Accounts.list_user_with_preload()
     # last_message |> IO.inspect(label: "mess")
-    {:ok, assign(socket, users: users, selected_user_id: nil)}
+    user_topic = Messaging.list_topics_for_current_user(current_user.id)
+    {:ok, assign(socket, users: users, selected_user_id: nil, user_topic: user_topic)}
   end
 
   @impl true
-  def handle_event("start_conversation", %{"user_id" => user_id}, %{assigns: %{current_user: current_user}} = socket) do
+  def handle_event("start_conversation", %{"user_id" => user_id, "titre" => titre}, %{assigns: %{current_user: current_user}} = socket) do
     link = SecureRandom.urlsafe_base64(16)
 
 
     # Messaging.associate_users_to_topic(%{"link" => link}, [user_id] )
-    Messaging.associate_users_to_topic(%{"link" => link}, [current_user.id, user_id] )
+    Messaging.associate_users_to_topic(%{"link" => link, "titre" => titre}, [current_user.id, user_id] )
     |> IO.inspect(label: "mess")
 
     # case Accounts.get_user_by_id(user_id) do
@@ -70,8 +71,28 @@ defmodule NanoShdxwWeb.StartConversationLive do
             <option value={user.id}>{user.email}</option>
           <% end %>
         </select>
+        <label for="titre">Title:</label>
+      <input type="text" name="titre" required/>
         <.button type="submit">Start Conversation</.button>
       </.form>
+      <br/>
+      <%= for user_topic <- @user_topic do %>
+        <div>
+    <.link patch={~p"/conversation/#{user_topic.link}"}>liens :<p class="text-blue-500">{user_topic.link}</p></.link>
+          <p>titre : {user_topic.titre}</p>
+          <p>last_message :
+          <%= case Messaging.get_last_message_by_topic_id(user_topic.id) do %>
+            <% nil -> %>
+              vide
+            <% last_message -> %>
+              {last_message.content}
+          <% end %>
+          </p>
+        </div>
+      <.button>
+    <.link patch={~p"/conversation/#{user_topic.link}"}>Go to conversation</.link>
+    </.button>
+      <% end %>
       <%= if @flash[:error] do %>
         <p class="error">{@flash[:error]}</p>
       <% end %>

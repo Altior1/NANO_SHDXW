@@ -16,7 +16,7 @@ defmodule NanoShdxw.Messaging.Topic do
   @doc false
   def changeset(topic, attrs) do
     topic
-    |> cast(attrs, [:id_message, :titre, :link])
+    |> cast(attrs, [:titre, :link])
     |> validate_required([:link])
   end
 end
