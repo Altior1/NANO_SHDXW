@@ -121,7 +121,12 @@ defmodule NanoShdxw.Messaging do
         where: m.topic_id == ^topic_id,
         order_by: [desc: m.inserted_at],
         limit: 1,
-        select: %{content: m.content, inserted_at: m.inserted_at, sender_id: m.sender_id, receiver_id: m.receiver_id}
+        select: %{
+          content: m.content,
+          inserted_at: m.inserted_at,
+          sender_id: m.sender_id,
+          receiver_id: m.receiver_id
+        }
 
     Repo.one(query)
   end
@@ -305,7 +310,7 @@ defmodule NanoShdxw.Messaging do
   end
 
   def get_messages_by_topic_id(topic_id) do
-    topic_id |>IO.inspect(label: "lala")
+    topic_id |> IO.inspect(label: "lala")
     Repo.all(from m in Message, where: m.topic_id == ^topic_id, order_by: [asc: m.inserted_at])
   end
 
@@ -381,7 +386,6 @@ defmodule NanoShdxw.Messaging do
     topic
     |> IO.inspect(label: "topic")
 
-
     %NanoShdxw.Messaging.Topic{}
     # |> Ecto.Changeset.change(topic)
     Topic.changeset(%Topic{}, topic)
@@ -390,6 +394,7 @@ defmodule NanoShdxw.Messaging do
     |> Ecto.Changeset.put_assoc(:users, NanoShdxw.Accounts.list_users(user_ids))
     |> IO.inspect(label: "changeset 2")
     |> Repo.insert!()
+
     # |> Ecto.Changeset.put_assoc(:topics, topic)
 
     # Repo.transaction(fn ->

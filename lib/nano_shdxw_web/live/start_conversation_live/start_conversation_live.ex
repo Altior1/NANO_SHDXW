@@ -14,12 +14,18 @@ defmodule NanoShdxwWeb.StartConversationLive do
   end
 
   @impl true
-  def handle_event("start_conversation", %{"user_id" => user_id, "titre" => titre}, %{assigns: %{current_user: current_user}} = socket) do
+  def handle_event(
+        "start_conversation",
+        %{"user_id" => user_id, "titre" => titre},
+        %{assigns: %{current_user: current_user}} = socket
+      ) do
     link = SecureRandom.urlsafe_base64(16)
 
-
     # Messaging.associate_users_to_topic(%{"link" => link}, [user_id] )
-    Messaging.associate_users_to_topic(%{"link" => link, "titre" => titre}, [current_user.id, user_id] )
+    Messaging.associate_users_to_topic(%{"link" => link, "titre" => titre}, [
+      current_user.id,
+      user_id
+    ])
     |> IO.inspect(label: "mess")
 
     # case Accounts.get_user_by_id(user_id) do
@@ -72,26 +78,31 @@ defmodule NanoShdxwWeb.StartConversationLive do
           <% end %>
         </select>
         <label for="titre">Title:</label>
-      <input type="text" name="titre" required/>
+        <input type="text" name="titre" required />
         <.button type="submit">Start Conversation</.button>
       </.form>
-      <br/>
+      <br />
       <%= for user_topic <- @user_topic do %>
-        <div>
-    <.link patch={~p"/conversation/#{user_topic.link}"}>liens :<p class="text-blue-500">{user_topic.link}</p></.link>
-          <p>titre : {user_topic.titre}</p>
-          <p>last_message :
-          <%= case Messaging.get_last_message_by_topic_id(user_topic.id) do %>
-            <% nil -> %>
-              vide
-            <% last_message -> %>
-              {last_message.content}
-          <% end %>
+        <div class="p-8 max-w-sm rounded-lg overflow-hidden shadow-lg ">
+          <p class="text-lg uppercase flex justify-center">{user_topic.titre}</p>
+          <.link patch={~p"/conversation/#{user_topic.link}"}>
+            liens :<p class="text-blue-500">{user_topic.link}</p>
+          </.link>
+          <p>
+            last_message :
+            <%= case Messaging.get_last_message_by_topic_id(user_topic.id) do %>
+              <% nil -> %>
+                vide
+              <% last_message -> %>
+                {last_message.content}
+            <% end %>
           </p>
+          <div class="pt-8 flex justify-center">
+            <.button class="">
+              <.link patch={~p"/conversation/#{user_topic.link}"}>Go to conversation</.link>
+            </.button>
+          </div>
         </div>
-      <.button>
-    <.link patch={~p"/conversation/#{user_topic.link}"}>Go to conversation</.link>
-    </.button>
       <% end %>
       <%= if @flash[:error] do %>
         <p class="error">{@flash[:error]}</p>
