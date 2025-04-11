@@ -18,7 +18,7 @@ defmodule NanoShdxwWeb.ReservationCalendarLive do
         <.button id="zoom_week">Semaine</.button>
       </div>
       <div id="calendar" phx-hook="CalendarHook"></div>
-      <br/>
+      <br />
       <.button phx-click="new">New Reservation</.button>
     </div>
     """

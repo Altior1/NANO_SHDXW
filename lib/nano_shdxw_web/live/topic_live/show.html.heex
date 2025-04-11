@@ -1,0 +1,34 @@
+<.header>
+  Topic {@topic.id}
+  <:subtitle>This is a topic record from your database.</:subtitle>
+  <:actions>
+    <.link patch={~p"/topic/#{@topic}/show/edit"} phx-click={JS.push_focus()}>
+      <.button>Edit topic</.button>
+    </.link>
+  </:actions>
+</.header>
+
+<.list>
+  <:item title="Id message">{@topic.id_message}</:item>
+  <:item title="Id user">{@topic.id_user}</:item>
+  <:item title="Titre">{@topic.titre}</:item>
+  <:item title="Link">{@topic.link}</:item>
+</.list>
+
+<.back navigate={~p"/topic"}>Back to topic</.back>
+
+<.modal
+  :if={@live_action == :edit}
+  id="topic-modal"
+  show
+  on_cancel={JS.patch(~p"/topic/#{@topic}")}
+>
+  <.live_component
+    module={NanoShdxwWeb.TopicLive.FormComponent}
+    id={@topic.id}
+    title={@page_title}
+    action={@live_action}
+    topic={@topic}
+    patch={~p"/topic/#{@topic}"}
+  />
+</.modal>
